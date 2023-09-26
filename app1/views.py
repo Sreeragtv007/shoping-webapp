@@ -13,13 +13,10 @@ def index(request):
     context={'obj':obj,'data':data}
     return render(request,'index.html',context)
 
-# def productdetails(request,pk):
-#     obj=product.objects.filter(id=pk)
-#     print(obj)
-#     context={'obj':obj}
+def home(request):
+    return render(request,'home.html')
 
-    
-#     return render(request,'product.html',context)
+
 
 
 

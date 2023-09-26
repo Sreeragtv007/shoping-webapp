@@ -10,6 +10,9 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <style>.card{
+      width: 300rem;
+    }</style>
   </head>
   <body>
     <div class="container">
@@ -25,21 +28,21 @@
           
         {% endfor %}
 
-        </div>
-        <div class="products card shadow mt-5 col-lg-9" >
-          {% for i in obj  %}
-
-          <a href=""><div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="{{i.image.url}}" alt="Card image cap">
+        </div>{% for i in obj  %}
+          
+        
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="card"><div class="card" style="width: 200px; height: 250;">
+            <img src="{{i.image.url}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{i.name}}</h5>
-              <p class="card-text"> Rs.{{i.price}}.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+              <p class="card-text">{{i.price}}.</p>
+              
             </div>
-          </div></a> <br>
-            
-          {% endfor %}
+          </div></div>
+          
         </div>
+        {% endfor %}
       </div>
     </div>
 
