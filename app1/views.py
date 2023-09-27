@@ -16,10 +16,9 @@ def home(request):
 
 def search_product(request):
     search=request.GET.get('searching')
-
-    
-    print(search)
-    return render(request,'product.html')
+    obj=product.objects.filter(name__icontains=search )
+    context={'obj':obj}
+    return render(request,'product.html',context)
 
 
 
