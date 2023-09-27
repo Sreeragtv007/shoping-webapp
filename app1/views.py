@@ -7,14 +7,19 @@ def index(request):
     obj=product.objects.filter(categ__name__icontains=q)
     data=category.objects.all()
 
-    
 
-    
     context={'obj':obj,'data':data}
     return render(request,'index.html',context)
 
 def home(request):
     return render(request,'home.html')
+
+def search_product(request):
+    search=request.GET.get('searching')
+
+    
+    print(search)
+    return render(request,'product.html')
 
 
 
