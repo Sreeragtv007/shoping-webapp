@@ -19,8 +19,10 @@ def index(request):
 def search_product(request):
     search=request.GET.get('searching')
     obj=product.objects.filter(name__icontains=search )
+    
     context={'obj':obj}
-    return render(request,'product.html',context)
+    return render (request,'index.html',context)
+    
 
 def register(request):
     if request.POST:
@@ -33,7 +35,7 @@ def register(request):
 
         elif pass1==pass2:
             user=User.objects.create_user(username=uname,password=pass1)
-            return redirect('index') 
+            return redirect('login') 
         else:
             messages.info(request,"password does not match")
             return redirect('register')
@@ -48,6 +50,9 @@ def login_user(request):
         if user is not None:
             login(request,user)
             return redirect('index')
+        else:
+            messages.info(request,"user name or password is incorrect")
+            return redirect('login')
             
         
     
