@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import product,category
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 def index(request):
@@ -11,14 +14,51 @@ def index(request):
     context={'obj':obj,'data':data}
     return render(request,'index.html',context)
 
-def home(request):
-    return render(request,'home.html')
+
 
 def search_product(request):
     search=request.GET.get('searching')
     obj=product.objects.filter(name__icontains=search )
     context={'obj':obj}
     return render(request,'product.html',context)
+
+def register(request):
+    if request.POST:
+        uname=request.POST.get('username')
+        pass1=request.POST.get('pass1')
+        pass2=request.POST.get('pass2')
+        if User.objects.filter(username=uname).exists():
+            messages.info(request,"user name taken")
+            return redirect('register')
+
+        elif pass1==pass2:
+            user=User.objects.create_user(username=uname,password=pass1)
+            return redirect('index') 
+        else:
+            messages.info(request,"password does not match")
+            return redirect('register')
+        
+    return render(request,'register.html')
+
+def login_user(request):
+    if request.POST:
+        uname=request.POST.get('username')
+        pass1=request.POST.get('pass1')
+        user=authenticate(username=uname,password=pass1)
+        if user is not None:
+            login(request,user)
+            return redirect('index')
+            
+        
+    
+    return render(request,'login.html')
+
+
+def logout_user(request):
+    logout(request)
+    return render(request,'login.html')
+
+
 
 
 
