@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
+#category list
 def index(request):
     q=request.GET.get('q') if request.GET.get('q') != None else ''
     obj=product.objects.filter(categ__name__icontains=q)
@@ -15,13 +16,20 @@ def index(request):
     return render(request,'index.html',context)
 
 
-
+#searching by product name
 def search_product(request):
-    search=request.GET.get('searching')
-    obj=product.objects.filter(name__icontains=search )
+    qu=None
+    pr=None
+    if 'qu' in request.GET:
+        qu=request.GET.get('qu')
+        pr=product.objects.filter(name__icontains=qu)
+        context={'pr':pr}
+        return render(request,'product.html',context)
+    else:
+
+        return render(request,'index.html')
     
-    context={'obj':obj}
-    return render (request,'index.html',context)
+            
     
 
 def register(request):

@@ -47,7 +47,7 @@
               
               
             </ul>
-            {% include "messages.html" %}
+            
             
           </li>{% if user.is_authenticated %}  <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">logout</a>
@@ -63,13 +63,15 @@
          
         </ul>
        
-        <form class="d-flex"  action="search">
-          <input class="form-control me-2" type="search" placeholder="Search" name="searching">
+        <form class="d-flex"  action="{% url 'search' %}" method="GET"> {% csrf_token %}
+          <input class="form-control me-2" type="search" placeholder="Search" name="qu">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>
     </div>
   </nav>
+
+  <div class="pl-3">{% include "messages.html" %}lll</div>
 
   {% block product %}
     
