@@ -71,6 +71,13 @@ def logout_user(request):
     logout(request)
     return render(request,'login.html')
 
+def productDetails(request,pk):
+    data=product.objects.filter(id=pk)
+    context={'data':data}
+    print('error')
+   
+    return render(request,'productdetails.html',context)
+
 
 
 
