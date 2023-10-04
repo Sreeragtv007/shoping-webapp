@@ -1,21 +1,38 @@
 {% extends "index.html" %}
 {% block content %}
 
-  {% for i in data  %}
+  
     
   
 <div class="col-sm-6 col-md-4 col-lg-2 ">
     <a href=""><div class="card"><div class="card" style="width: 250px; height: 300px;">
-      <img src="{{i.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
+      <img src="{{data.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
       <div class="card-body">
-        <h5 class="card-title" style="width: auto;">{{i.name}}</h5>
-        <p class="card-text">{{i.price}}.</p>
-        <p class="card-text">{{i.desc}}.</p>
+        <h5 class="card-title" style="width: auto;">{{data.name}}</h5>
+        <p class="card-text">{{data.price}}.</p>
+        <p class="card-text">{{data.desc}}.</p>
         
       </div>
     </div></div></a>
     
   </div>
-  {% endfor %}
+ 
+
+  <div class="mt-2">
+    <form action="" method="POST">{% csrf_token %}
+      <input type="text" name="review" placeholder="post your review">
+      <input type="submit" value="post">
+    </form>
+  </div >
+  <div class="mt-2">
+
+    {% for i in obj  %}
+
+
+    {{i.review_body}}
+    <br>
+      
+    {% endfor %}
+  </div>
 {% endblock content %}
 

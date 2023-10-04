@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import product,category
+from .models import product,category,Review
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -8,11 +8,11 @@ from django.contrib.auth import authenticate,login,logout
 #category list
 def index(request):
     q=request.GET.get('q') if request.GET.get('q') != None else ''
-    obj=product.objects.filter(categ__name__icontains=q)
-    data=category.objects.all()
+    o=product.objects.filter(categ__name__icontains=q)
+    d=category.objects.all()
 
 
-    context={'obj':obj,'data':data}
+    context={'o':o,'d':d}
     return render(request,'index.html',context)
 
 
@@ -72,9 +72,17 @@ def logout_user(request):
     return render(request,'login.html')
 
 def productDetails(request,pk):
-    data=product.objects.filter(id=pk)
-    context={'data':data}
-    print('error')
+    data=product.objects.get(id=pk)
+    obj=data.review_set.all()
+    if request.POST:
+        result=request.POST.get("review")
+        print(result)
+        
+        review=Review.objects.create(review_body=result,product=data)
+        return redirect('index')
+
+    context={'data':data,'obj':obj}
+    
    
     return render(request,'productdetails.html',context)
 
