@@ -22,7 +22,9 @@ def search_product(request):
     pr=None
     if 'qu' in request.GET:
         qu=request.GET.get('qu')
+        print(qu)
         pr=product.objects.filter(name__icontains=qu)
+        print(pr)
         context={'pr':pr}
         return render(request,'product.html',context)
     else:
@@ -78,7 +80,7 @@ def productDetails(request,pk):
         result=request.POST.get("review")
         print(result)
         
-        review=Review.objects.create(review_body=result,product=data)
+        review=Review.objects.create(review_body=result,user=request.user,product=data)
         return redirect('productdetails',pk=data.id)
 
     context={'data':data,'obj':obj}

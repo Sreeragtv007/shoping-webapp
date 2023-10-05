@@ -30,7 +30,7 @@
   <div class="mt-2">
 
     {% for i in obj  %}
-    @{{user}}:-
+    @{{i.user}}:-
 
     <h5>{{i.review_body}}</h5>{{i.created|timesince}} ago
     <br>
