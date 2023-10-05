@@ -24,3 +24,5 @@ class Review(models.Model):
     review_body=models.TextField()
     created=models.DateTimeField(auto_now=True)
     product=models.ForeignKey(product,on_delete=models.CASCADE,default=True)
+class cart(models.Model):
+    name=models.TextField()

@@ -79,7 +79,7 @@ def productDetails(request,pk):
         print(result)
         
         review=Review.objects.create(review_body=result,product=data)
-        return redirect('index')
+        return redirect('productdetails',pk=data.id)
 
     context={'data':data,'obj':obj}
     
