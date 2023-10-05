@@ -86,6 +86,9 @@ def productDetails(request,pk):
    
     return render(request,'productdetails.html',context)
 
+def cart(request):
+    return render(request,'cart.html')
+
 
 
 

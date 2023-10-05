@@ -83,13 +83,14 @@
 
   <div class="pl-3">{% include "messages.html" %}</div>
 
-  {% block product %}
-    
-  {% endblock product %}
+ 
 
   {% block content %}
     
   {% endblock content %}
+  {% block cart %}
+    
+  {% endblock cart %}
   {% if user.is_authenticated %} 
   <div class="container">
     <div class="row">
@@ -98,12 +99,12 @@
       </div>{% for i in o  %}
         
       
-      <div class="col-sm-6 col-md-4 col-lg-2">
-        <a href="{% url 'productdetails' i.id %}"><div class="card"><div class="card" style="width: 250px; height: 250px;">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <a href="{% url 'productdetails' i.id %}"><div class="card"><div class="card" style="width: 200px; height: 250px; align-items: center;">
           <img src="{{i.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
           <div class="card-body">
             <h5 class="card-title" style="width: auto;">{{i.name}}</h5>
-            <p class="card-text">{{i.price}}.</p>
+            <p class="card-text">price:  {{i.price}}.</p>
             
           </div>
         </div></div></a>
