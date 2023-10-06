@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import product,category,Review
+from .models import product,category,Review,Cart
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -88,7 +88,22 @@ def productDetails(request,pk):
    
     return render(request,'productdetails.html',context)
 
-def cart(request):
+def cart(request,pk):
+    data=product.objects.get(id=pk)
+    cart=Cart.objects.create(name=data.name,price=data.price,disc=data.desc,product=data,user=request.user,image=data.image)
+    cart.save()
+    return redirect('productdetails',pk=data.id)
+
+def cartdeatil(request):
+    
+    cart=Cart.objects.filter(user=request.user)
+    context={'cart':cart}
+
+    return render(request,'cart.html',context)
+def removeCart(request,pk):
+    cart=Cart.objects.get(id=pk)
+    cart.delete()
+    
     return render(request,'cart.html')
 
 

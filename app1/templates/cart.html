@@ -2,6 +2,24 @@
 {% block cart %}
 
 
-cart
+<div class="d-flex flex-row">
+    {% for i in cart  %}
+<a href=""><div class="card"><div class="card" style="width: 250px; height: 300px;">
+    <img src="{{i.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
+    <div class="card-body">
+      <h5 class="card-title" style="width: auto;">{{i.name}}</h5>
+      <p class="card-text">{{i.price}}.</p>
+      <p class="card-text">{{i.disc}}.</p>
+
+      <a href="{% url 'removecart' i.id %}"><button>remove from cart</button></a>
+      
+    </div>
+  </div></div></a>
+
+
+  
+{% endfor %}
+</div>
+
   
 {% endblock cart %}
