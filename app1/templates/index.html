@@ -59,17 +59,36 @@
           </li>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'cartdetail' %}">cart</a>
+          <a class="nav-link" href="{% url 'cartdetail' %}">cart {{count}}</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            account
+          </a>
+          <ul class="dropdown-menu">
+            <ul>
+              <li><a href="{% url 'account' %}">change user name</a></li>
+            </ul>
+            <ul>
+              <li><a href="{% url 'account' %}">change password</a></li>
+            </ul>
+            
+            
+          </ul>
+          
+          
         </li>
 
           <li class="nav-item">
-            <a class="nav-link" href=""><h6> welcome  {{user}}</h6></a>
+            <a class="nav-link pl-5" href=""><h6> welcome  {{user}}</h6></a>
           </li> {% else %}<li class="nav-item">
             <a class="nav-link" href="{% url 'register' %}">register</a>
           </li>
+          
           <li class="nav-item">
             <a class="nav-link " aria-disabled="true" href="{% url 'login' %}">login</a>
           </li>
+         
           
             
             {% endif %}
@@ -84,8 +103,11 @@
       </div>
     </div>
   </nav>
+  {% block account %}
+    
+  {% endblock account %}
 
-  <div class="pl-3">{% include "messages.html" %}</div>
+ 
   {% block product %}
     
   {% endblock product %}

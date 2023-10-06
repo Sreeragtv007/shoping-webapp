@@ -4,7 +4,7 @@
   
     
   
-<div class="col-sm-6 col-md-4 col-lg-2 ">
+<div class="col-sm-6 col-md-4 col-lg-2  ">
     <a href=""><div class="card"><div class="card" style="width: 250px; height: 300px;">
       <img src="{{data.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
       <div class="card-body">
@@ -14,7 +14,8 @@
         
       </div>
     </div></div></a>
-    <a href="{% url 'cart' data.id %}">add to cart</a>
+    <button class="btn btn-outline-info "><a href="{% url 'cart' data.id %} " class="text-black">add to cart</a></button>
+    <h6>{% include "messages.html" %}</h6>
     
   </div>
  
@@ -26,12 +27,13 @@
     </form>
   </div >
   <div class="mt-2">
+    
 
-    {% for i in obj  %}
-    @{{i.user}}:-
+    {% for i in obj  %} <span>
+    <h6>@{{i.user}}:-
 
-    <h5>{{i.review_body}}</h5>{{i.created|timesince}} ago
-    <br>
+      {{i.review_body}}{{i.created|timesince}} ago <button><a href="{% url 'delet' i.id %}">delet</a></button></span>
+    <br> <br>
       
     {% endfor %}
   </div>
