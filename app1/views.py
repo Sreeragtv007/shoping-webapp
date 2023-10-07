@@ -12,7 +12,7 @@ def index(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     o = product.objects.filter(categ__name__icontains=q)
     d = category.objects.all()
-    count = Cart.objects.filter(user=request.user).count()
+    #count = Cart.objects.filter(user=request.user)
 
     context = {'o': o, 'd': d, 'cart': cart}
     return render(request, 'index.html', context)
@@ -125,17 +125,14 @@ def removeCart(request, pk):
 
 
 def reviewDelet(request, pk):
-    review = Review.objects.get(id=pk)
-    review.delete()
-    return redirect('productdetails', pk=review.product.id)
-
-def account(request):
-    uname=request.POST.get('uname')
     
-    if request.POST:
-        user=User.objects.get(id=request.user.id)
-        user.username=uname
-        user.save()
-        return render(request,'index.html')
+    review=Review.objects.get(id=pk)
+    if review.user.id==request.user.id:
+        review.delete()
+        return redirect('productdetails', pk=review.product.id)
     else:
-        return render(request,'account.html')
+        return redirect('productdetails',pk=review.product.id)
+
+
+    
+    
