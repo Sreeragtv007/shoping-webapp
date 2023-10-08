@@ -90,30 +90,25 @@ def productDetails(request, pk):
 
 
 def cart(request, pk):
-    data = product.objects.get(id=pk)
-
-    cart = Cart.objects.create(name=data.name,
-                               price=data.price,
-                               disc=data.desc,
-                               product=data,
-                               user=request.user,
-                               image=data.image)
-    messages.info(request, "product added to cart")
-
-    return redirect('productdetails', pk=data.id)
+     obj=product.objects.get(id=pk)
+     cart=Cart.objects.create(user=request.user,product=obj)
+     messages.info(request,"product added to cart")
+   
+        
+    
+     return redirect('productdetails',pk=obj.id)
+    
 
 
 def cartdeatil(request):
 
     cart = Cart.objects.filter(user=request.user)
-
-    if len(cart) == 0:
+    if len(cart)==0:
         return redirect('index')
     else:
-
-        context = {'cart': cart}
-
-        return render(request, 'cart.html', context)
+        context={'cart':cart}
+   
+    return render(request, 'cart.html',context)
 
 
 def removeCart(request, pk):
