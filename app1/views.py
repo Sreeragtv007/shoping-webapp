@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import product, category, Review, Cart
+from .models import Product, category, Review, Cart
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    o = product.objects.filter(categ__name__icontains=q)
+    o = Product.objects.filter(categ__name__icontains=q)
     d = category.objects.all()
     #count = Cart.objects.filter(user=request.user)
 
@@ -25,7 +25,7 @@ def search_product(request):
     if 'qu' in request.GET:
         qu = request.GET.get('qu')
         print(qu)
-        pr = product.objects.filter(name__icontains=qu)
+        pr = Product.objects.filter(name__icontains=qu)
         print(pr)
         context = {'pr': pr}
         return render(request, 'product.html', context)
@@ -70,11 +70,11 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return render(request, 'login.html')
+    return render(request,'login.html')
 
 
 def productDetails(request, pk):
-    data = product.objects.get(id=pk)
+    data = Product.objects.get(id=pk)
     obj = data.review_set.all()
     if request.POST:
         result = request.POST.get("review")
@@ -90,19 +90,23 @@ def productDetails(request, pk):
 
 
 def cart(request, pk):
-     obj=product.objects.get(id=pk)
-     cart=Cart.objects.create(user=request.user,product=obj)
-     messages.info(request,"product added to cart")
-   
-        
+    try:
     
-     return redirect('productdetails',pk=obj.id)
+        obj=Product.objects.get(id=pk)
+        cart=Cart.objects.create(user=request.user,product=obj)
+        messages.info(request,"product added to cart")
+        return redirect('productdetails',pk=obj.id)
+    except:
+        messages.info(request,"product alredy added")
+        return redirect('productdetails',pk=obj.id)
     
 
 
 def cartdeatil(request):
 
     cart = Cart.objects.filter(user=request.user)
+    print(cart)
+    
     if len(cart)==0:
         return redirect('index')
     else:
