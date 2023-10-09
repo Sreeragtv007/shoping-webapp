@@ -32,8 +32,14 @@
     {% for i in obj  %} <span>
     <h6>@{{i.user}}:-
 
-      {{i.review_body}}{{i.created|timesince}} ago <button><a href="{% url 'delet' i.id %}">delet</a></button></span>
+      {{i.review_body}}          {{i.created|timesince}} ago 
+      {% if request.user == i.user %}
+        
+      
+      
+      <button><a href="{% url 'delet' i.id %}">delet</a></button></span>
     <br> <br>
+    {% endif %}
       
     {% endfor %}
   </div>

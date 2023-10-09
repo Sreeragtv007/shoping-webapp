@@ -76,6 +76,7 @@ def logout_user(request):
 def productDetails(request, pk):
     data = Product.objects.get(id=pk)
     obj = data.review_set.all()
+    
     if request.POST:
         result = request.POST.get("review")
         print(result)
@@ -90,22 +91,25 @@ def productDetails(request, pk):
 
 
 def cart(request, pk):
-    try:
+    obj=Product.objects.get(id=pk)
+    cart=Cart.objects.all()
     
-        obj=Product.objects.get(id=pk)
-        cart=Cart.objects.create(user=request.user,product=obj)
-        messages.info(request,"product added to cart")
-        return redirect('productdetails',pk=obj.id)
-    except:
-        messages.info(request,"product alredy added")
-        return redirect('productdetails',pk=obj.id)
+    for i in cart:
+        if i.product.id == obj.id:
+            messages.info(request,"product already added")
+            return redirect('productdetails',pk=obj.id)
+        
+    cart=Cart.objects.create(user=request.user,product=obj)
+    messages.info(request,"product added to cart")
     
+    return redirect('productdetails',pk=obj.id)
+
 
 
 def cartdeatil(request):
 
     cart = Cart.objects.filter(user=request.user)
-    print(cart)
+    
     
     if len(cart)==0:
         return redirect('index')
