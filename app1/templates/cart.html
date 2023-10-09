@@ -7,35 +7,23 @@
 
     {% for i in cart  %}
     <div class="col-sm-6 col-md-4 col-lg-3">
-      <a href=""><div class="card"><div class="card" style="width: 100%; height: 250px; align-items: center; justify-items: center;">
-        <img src="{{i.product.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
+      <a href=""><div class="card mt-5"><div class="" style="width: 80%; height: 100%; align-items: center; justify-items: center; justify-content: center;">
+        <img src="{{i.product.image.url}}" class="card-img-top mt-3 " alt="..." style="height: 150px; width: 100%;">
         <div class="card-body">
           <h5 class="card-title" style="width: auto;">{{i.product.name}}</h5>
           <p class="card-text">price:  {{i.product.price}}.</p>
+          
+
+         
+          
+          
           <a href="{% url 'removecart' i.id %}"><button>remove from cart</button></a>
           
         </div>
       </div></div></a>
       
     </div>{% endfor %}
-    <!-- <div class="d-flex flex-row ">
-      {% for i in cart  %}
-  <a href=""><div class="card"><div class="card" style="width: 250px; height: 300px;">
-      <img src="{{i.product.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 250px;">
-      <div class="card-body">
-        <h5 class="card-title" style="width: auto;">{{i.product.name}}</h5>
-        <p class="card-text">{{i.product.price}}.</p>
-        <p class="card-text">{{i.product.disc}}.</p>
-  
-        <a href="{% url 'removecart' i.id %}"><button>remove from cart</button></a>
-        
-      </div>
-    </div></div></a>
-  
-  
-    
-  {% endfor %}
-  </div> -->
+   
   </div>
 </div>
 {% include "messages.html" %}

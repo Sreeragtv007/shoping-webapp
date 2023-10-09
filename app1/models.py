@@ -28,7 +28,9 @@ class Review(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE,default=True)
     
 class Cart(models.Model):
+    CHOICES = [(i,i) for i in range(11)]
     product=models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    qty=models.IntegerField( choices=CHOICES,default=0)
 
     
