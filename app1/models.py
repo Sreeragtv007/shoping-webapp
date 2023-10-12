@@ -15,7 +15,7 @@ class Product(models.Model):
         ordering=['-created']
     
 
-class category(models.Model):
+class Category(models.Model):
     name=models.CharField(max_length=50)
 
     def __str__(self):
@@ -28,9 +28,15 @@ class Review(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE,default=True)
     
 class Cart(models.Model):
-    CHOICES = [(i,i) for i in range(11)]
+    
     product=models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
-    qty=models.IntegerField( choices=CHOICES,default=0)
+    qty=models.IntegerField(default=1)
 
+class Buyproduct(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
+    qty=models.IntegerField( default=1)
+    address=models.TextField(blank=True,null=True)
+    pincode=models.IntegerField(blank=True,null=True)
     

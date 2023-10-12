@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+{% block paginator %}
+
+
+
+  
+    
+      <div class="container">
+        <div class="row">
+         {% for i in page_obj.object_list  %}
+            
+          
+          <div class="col-sm-6 col-md-4 mt-5 mb-4">
+            <a href="{% url 'productdetails' i.id %}"><div class=""><div class="card" style="width: 100%; height: 250px; align-items: center; ">
+              <img src="{{i.image.url}}" class="card-img-top mt-4" alt="..." style="height: 150px; width: 200px;">
+              <div class="card-body">
+                <h5 class="card-title" style="width: auto;">{{i.name}}</h5>
+                <p class="card-text">price:  {{i.price}}.</p>
+                
+              </div>
+            </div></div></a>
+            
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+  
+     
+            
+          </div>
+        </div></div></a>
+        
+      </div>
+         
+  
+  
+        <hr/>
+    
+  </div>
+  <center>
+    {%if page_obj.has_previous %} {# whether the previous page exists #}
+        <a href="?page={{page_obj.previous_page_number}}"><h4><</h4></a> {# link to the prev page #}
+    {% endif %}
+    <span>{{page_obj.number}}</span> {# the current page number #}
+   
+    {%if page_obj.has_next %} {# whether the next page exists #}
+        <a href="?page={{page_obj.next_page_number}}">></a> {# link to the next page #}
+    {% endif %}
+  </center>
+
+  {% endblock paginator %}

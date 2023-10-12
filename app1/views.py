@@ -1,32 +1,51 @@
 from django.shortcuts import redirect, render
-from .models import Product, category, Review, Cart
+from .models import Product, Category, Review, Cart,Buyproduct
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+
 # Create your views here.
+
+
 # category list
 
 
 def index(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-    o = Product.objects.filter(categ__name__icontains=q)
-    d = category.objects.all()
-    #count = Cart.objects.filter(user=request.user)
+    category=Category.objects.all()
+    
+    context={'category':category}
+    
+    posts = Product.objects.all()  # fetching all post objects from database
+    p = Paginator(posts, 6)  # creating a paginator object
+    # getting the desired page number from url
+    page_number = request.GET.get('page')
+    try:
+        page_obj = p.get_page(page_number)  # returns the desired page object
+    except PageNotAnInteger:
+        # if page_number is not an integer then assign the first page
+        page_obj = p.page(1)
+    except EmptyPage:
+        # if page is empty then return last page
+        page_obj = p.page(p.num_pages)
+    context = {'page_obj': page_obj,'category':category}
+    # sending the page object to index.html
+    return render(request, 'paginator.html', context)
 
-    context = {'o': o, 'd': d, 'cart': cart}
-    return render(request, 'index.html', context)
 
 
+    
+    
 # searching by product name
 def search_product(request):
     qu = None
     pr = None
     if 'qu' in request.GET:
         qu = request.GET.get('qu')
-        print(qu)
         pr = Product.objects.filter(name__icontains=qu)
-        print(pr)
         context = {'pr': pr}
         return render(request, 'product.html', context)
     else:
@@ -135,6 +154,33 @@ def reviewDelet(request, pk):
         return redirect('productdetails', pk=review.product.id)
     else:
         return redirect('productdetails',pk=review.product.id)
+    
+
+def buyProduct(request,pk):
+    product=Product.objects.get(id=pk)
+    if request.POST:
+        address=request.POST.get('address')
+        pincode=request.POST.get('pincode')
+        qty=request.POST.get('qty')
+
+        buyproduct=Buyproduct.objects.create(user=request.user,product=product,qty=qty,address=address,pincode=pincode)
+        return redirect('index')
+        
+    
+
+    context={'product':product}
+    
+    
+    
+    return render(request,'buyproduct.html',context)
+    
+
+    
+
+
+    
+
+
 
 
     

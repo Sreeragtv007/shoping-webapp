@@ -13,5 +13,7 @@ urlpatterns = [
     path('cart/',views.cartdeatil,name='cartdetail'),
     path('remove/<str:pk>/',views.removeCart,name='removecart'),
     path('reviewdelet/<str:pk>/',views.reviewDelet,name='delet'),
+    path('buyProduct/<str:pk>/',views.buyProduct,name='buyproduct'),
+    #path('buyproduct/',views.buyProduct,name='buyproduct')
    
 ]

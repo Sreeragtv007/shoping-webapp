@@ -1,0 +1,57 @@
+{% extends "index.html" %}
+
+
+{% block buyproduct %}
+  
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3 card shadow mt-5"><div class=" "><div class="" >
+      <img src="{{product.image.url}}" class="card-img-top mt-3 " alt="..." style="height: 150px; width: 80%;">
+      <div class="card-body">
+        <h5 class="card-title" style="width: auto;">{{product.name}}</h5>
+        <p class="card-text">price:  {{product.price}}.</p>
+        <p class="card-text">price:  {{product.desc}}.</p>
+        
+
+       
+        
+        
+       
+        
+      
+      </div>
+    </div></div>
+
+    </div>
+    <div class="col-lg-9 card shadow mt-5">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <label for="" class="">address</label>
+        <input type="text" class="pl-3" name='address'> <br>
+
+        <label for="">pin code</label>
+        <input type="number" name="pincode"> <br>
+
+        <label for="">quantity</label>
+        <input type="number" name="qty"> <br>
+
+       <a href="{% url 'buyproduct' product.id %}"> <input type="submit" value="buy now"></a>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock buyproduct %}

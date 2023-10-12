@@ -10,6 +10,9 @@
           <h5 class="card-title" style="width: auto;">{{data.name}}</h5>
           <p class="card-text">{{data.price}}.</p>
           <p class="card-text">{{data.desc}}.</p>
+          <div><a href="{% url 'buyproduct' data.id %}"><button class="btn btn-outline-info mb-3">buy now</button></a></div>
+
+          
           <button class="btn btn-outline-info "><a href="{% url 'cart' data.id %} " class="text-black">add to cart</a></button>
       <h6>{% include "messages.html" %}</h6>
       <div class="mt-2">
@@ -27,6 +30,8 @@
           {{i.review_body}}          {{i.created|timesince}} ago 
           {% if request.user == i.user %}
             
+
+         
           
           
           <button><a href="{% url 'delet' i.id %}">delet</a></button></span>
