@@ -5,6 +5,8 @@
 <div class="container">
   <div class="row">
 
+    
+
     {% for i in cart  %}
     <div class="col-sm-6 col-md-4 col-lg-3">
       <a href=""><div class="card mt-5"><div class="" style="width: 80%; height: 100%; align-items: center; justify-items: center; justify-content: center;">
@@ -24,10 +26,21 @@
       </div></div></a>
       
     </div>{% endfor %}
+
+   
    
   </div>
+  <h4> {% include "messages.html" %}</h4>
+</div> <div class="container">
+  <div class="row">
+    <div class="d-flex align-items-center justify-content-center mt-5">
+      <a href=""> <input type="submit" value="buy now " class="btn btn-outline-info"></a>
+    </div>
+  </div>
 </div>
-{% include "messages.html" %}
+
+
+
 
   
 {% endblock cart %}

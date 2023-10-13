@@ -1,11 +1,11 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render,get_object_or_404
 from .models import Product, Category, Review, Cart,Buyproduct
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+import datetime
 
 
 # Create your views here.
@@ -16,6 +16,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
     category=Category.objects.all()
+    cart_count=Cart.objects.filter(user=request.user).count()
+    print(cart_count)
     
     context={'category':category}
     
@@ -31,9 +33,9 @@ def index(request):
     except EmptyPage:
         # if page is empty then return last page
         page_obj = p.page(p.num_pages)
-    context = {'page_obj': page_obj,'category':category}
+    context = {'page_obj': page_obj,'category':category,'cart_count':cart_count}
     # sending the page object to index.html
-    return render(request, 'paginator.html', context)
+    return render(request, 'index.html', context)
 
 
 
@@ -41,6 +43,8 @@ def index(request):
     
 # searching by product name
 def search_product(request):
+    
+    
     qu = None
     pr = None
     if 'qu' in request.GET:
@@ -130,6 +134,7 @@ def cartdeatil(request):
     cart = Cart.objects.filter(user=request.user)
     
     
+    
     if len(cart)==0:
         return redirect('index')
     else:
@@ -142,6 +147,7 @@ def removeCart(request, pk):
 
     cart = Cart.objects.get(id=pk)
     cart.delete()
+    messages.info(request,"product removed from cart")
 
     return redirect('cartdetail')
 
@@ -158,6 +164,7 @@ def reviewDelet(request, pk):
 
 def buyProduct(request,pk):
     product=Product.objects.get(id=pk)
+    
     if request.POST:
         address=request.POST.get('address')
         pincode=request.POST.get('pincode')
@@ -173,6 +180,15 @@ def buyProduct(request,pk):
     
     
     return render(request,'buyproduct.html',context)
+
+
+def showBuyProduct(request):
+    buyedproduct=Buyproduct.objects.all()
+    print(buyedproduct)
+    context={'buyedproduct':buyedproduct}
+    return render (request,'buyedproduct.html',context)
+
+
     
 
     

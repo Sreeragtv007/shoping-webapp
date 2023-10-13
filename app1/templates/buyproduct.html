@@ -6,7 +6,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-lg-3 card shadow mt-5"><div class=" "><div class="" >
+    <div class="col-lg-3 col-5 card shadow mt-5"><div class=" "><div class="" >
       <img src="{{product.image.url}}" class="card-img-top mt-3 " alt="..." style="height: 150px; width: 80%;">
       <div class="card-body">
         <h5 class="card-title" style="width: auto;">{{product.name}}</h5>
@@ -37,8 +37,10 @@
         <input type="number" name="qty"> <br>
 
        <a href="{% url 'buyproduct' product.id %}"> <input type="submit" value="buy now"></a>
-      </form>
 
+
+      </form> <br>
+          total amount to be payed :
     </div>
   </div>
 </div>
