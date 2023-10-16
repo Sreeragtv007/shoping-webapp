@@ -15,9 +15,11 @@ import datetime
 
 
 def index(request):
+
+    
     category=Category.objects.all()
-    cart_count=Cart.objects.filter(user=request.user).count()
-    print(cart_count)
+    
+    
     
     context={'category':category}
     
@@ -33,7 +35,7 @@ def index(request):
     except EmptyPage:
         # if page is empty then return last page
         page_obj = p.page(p.num_pages)
-    context = {'page_obj': page_obj,'category':category,'cart_count':cart_count}
+    context = {'page_obj': page_obj,'category':category}
     # sending the page object to index.html
     return render(request, 'index.html', context)
 
