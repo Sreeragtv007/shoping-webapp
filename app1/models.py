@@ -39,4 +39,5 @@ class Buyproduct(models.Model):
     qty=models.IntegerField( default=1)
     address=models.TextField(blank=True,null=True)
     pincode=models.IntegerField(blank=True,null=True)
+    purchased_time=models.DateTimeField(auto_now=True)
     
