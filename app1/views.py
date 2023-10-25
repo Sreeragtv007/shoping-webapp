@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import datetime
+
 
 
 # Create your views here.
