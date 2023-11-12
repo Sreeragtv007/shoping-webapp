@@ -1,11 +1,10 @@
-from django.shortcuts import redirect, render,get_object_or_404
-from .models import Product, Category, Review, Cart,Buyproduct
+from django.shortcuts import redirect, render, get_object_or_404
+from .models import Product, Category, Review, Cart, Buyproduct
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 
 
 # Create your views here.
@@ -16,13 +15,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
 
-    
-    category=Category.objects.all()
-    
-    
-    
-    context={'category':category}
-    
+    category = Category.objects.all()
+
+    context = {'category': category}
+
     posts = Product.objects.all()  # fetching all post objects from database
     p = Paginator(posts, 6)  # creating a paginator object
     # getting the desired page number from url
@@ -35,18 +31,14 @@ def index(request):
     except EmptyPage:
         # if page is empty then return last page
         page_obj = p.page(p.num_pages)
-    context = {'page_obj': page_obj,'category':category}
+    context = {'page_obj': page_obj, 'category': category}
     # sending the page object to index.html
     return render(request, 'index.html', context)
 
 
-
-    
-    
 # searching by product name
 def search_product(request):
-    
-    
+
     qu = None
     pr = None
     if 'qu' in request.GET:
@@ -95,13 +87,13 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return render(request,'login.html')
+    return render(request, 'login.html')
 
 
 def productDetails(request, pk):
     data = Product.objects.get(id=pk)
     obj = data.review_set.all()
-    
+
     if request.POST:
         result = request.POST.get("review")
         print(result)
@@ -116,90 +108,87 @@ def productDetails(request, pk):
 
 
 def cart(request, pk):
-    obj=Product.objects.get(id=pk)
-    cart=Cart.objects.all()
-    
+    obj = Product.objects.get(id=pk)
+    cart = Cart.objects.all()
+
     for i in cart:
         if i.product.id == obj.id:
-            messages.info(request,"product already added")
-            return redirect('productdetails',pk=obj.id)
-        
-    cart=Cart.objects.create(user=request.user,product=obj)
-    messages.info(request,"product added to cart")
-    
-    return redirect('productdetails',pk=obj.id)
+            messages.info(request, "product already added")
+            return redirect('productdetails', pk=obj.id)
 
+    cart = Cart.objects.create(user=request.user, product=obj)
+    messages.info(request, "product added to cart")
+
+    return redirect('productdetails', pk=obj.id)
 
 
 def cartdeatil(request):
 
     cart = Cart.objects.filter(user=request.user)
-    
-    
-    
-    if len(cart)==0:
+    global cart_count
+    cart_count=Cart.objects.filter(user=request.user).count()
+    print(cart_count)
+
+    if len(cart) == 0:
         return redirect('index')
     else:
-        context={'cart':cart}
-   
-    return render(request, 'cart.html',context)
+        context = {'cart': cart}
+
+    return render(request, 'cart.html', context)
 
 
 def removeCart(request, pk):
 
     cart = Cart.objects.get(id=pk)
     cart.delete()
-    messages.info(request,"product removed from cart")
+    messages.info(request, "product removed from cart")
 
     return redirect('cartdetail')
 
 
 def reviewDelet(request, pk):
-    
-    review=Review.objects.get(id=pk)
-    if review.user.id==request.user.id:
+
+    review = Review.objects.get(id=pk)
+    if review.user.id == request.user.id:
         review.delete()
         return redirect('productdetails', pk=review.product.id)
     else:
-        return redirect('productdetails',pk=review.product.id)
-    
+        return redirect('productdetails', pk=review.product.id)
+
 
 def buyProduct(request,pk):
-    product=Product.objects.get(id=pk)
     
-    if request.POST:
-        address=request.POST.get('address')
-        pincode=request.POST.get('pincode')
-        qty=request.POST.get('qty')
+    
+        product = Product.objects.get(id=pk)
+        if request.POST:
+            address = request.POST.get('address')
+            pincode = request.POST.get('pincode')
+            qty = request.POST.get('qty')
 
-        buyproduct=Buyproduct.objects.create(user=request.user,product=product,qty=qty,address=address,pincode=pincode)
-        return redirect('index')
-        
+            buyproduct = Buyproduct.objects.create(
+            user=request.user, product=product, qty=qty, address=address, pincode=pincode)
+            messages.info(request,"you purchase request is sucessfully created")
+            return redirect('index')
+
+        context = {'product': product}
+
+        return render(request, 'buyproduct.html',context)
+def buyProductfromcart(request):
+    cartproduct=Cart.objects.filter(user=request.user)
+    Buyproduct(cartproduct)
+
+
     
 
-    context={'product':product}
     
-    
-    
-    return render(request,'buyproduct.html',context)
+    return redirect('buyproduct')
+   
+
+   
 
 
 def showBuyProduct(request):
-    buyedproduct=Buyproduct.objects.all()
+    buyedproduct = Buyproduct.objects.all()
     print(buyedproduct)
-    context={'buyedproduct':buyedproduct}
-    return render (request,'buyedproduct.html',context)
-
-
-    
-
-    
-
-
-    
-
-
-
-
-    
-    
+    context = {'buyedproduct': buyedproduct}
+    return render(request, 'buyedproduct.html', context)

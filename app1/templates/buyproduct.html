@@ -27,21 +27,23 @@
     <div class="col-lg-9 card shadow mt-5">
       <form action="" method="POST">
         {% csrf_token %}
-        <label for="" class="">address</label>
+        <label for="" class="mt-2">address</label><br>
         <input type="text" class="pl-3" name='address'> <br>
 
-        <label for="">pin code</label>
+        <label for="">pin code</label> <br>
         <input type="number" name="pincode"> <br>
 
-        <label for="">quantity</label>
+        <label for="">quantity</label> <br>
         <input type="number" name="qty"> <br>
 
-       <a href="{% url 'buyproduct' product.id %}"> <input type="submit" value="buy now"></a>
+       <a href="{% url 'buyproduct' product.id %}" class=""> <input type="submit" value="buy now" class="mt-3"></a>
 
 
       </form> <br>
-          total amount to be payed :
+        
     </div>
+
+    
   </div>
 </div>
 
