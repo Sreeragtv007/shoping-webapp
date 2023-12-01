@@ -32,7 +32,9 @@ class Cart(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     qty=models.IntegerField(default=1)
+    total=models.IntegerField(blank=True,null=True)
 
+   
 class Buyproduct(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     product=models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
@@ -40,4 +42,4 @@ class Buyproduct(models.Model):
     address=models.TextField(blank=True,null=True)
     pincode=models.IntegerField(blank=True,null=True)
     purchased_time=models.DateTimeField(auto_now=True)
-    
+

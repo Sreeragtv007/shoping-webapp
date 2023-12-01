@@ -15,11 +15,17 @@
           
           <button class="btn btn-outline-info "><a href="{% url 'cart' data.id %} " class="text-black">add to cart</a></button>
       <h6>{% include "messages.html" %}</h6>
-      <div class="mt-2">
+      <div class="mt-2"> {% if authenticated %}
+        
+    
         <form action="" method="POST">{% csrf_token %}
           <input type="text" name="review" placeholder="post your review">
           <input type="submit" value="post">
         </form>
+
+        
+        {% endif %}
+        <h5>reviews</h5>
       </div >
       <div class="mt-2">
         
