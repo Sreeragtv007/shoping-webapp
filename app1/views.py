@@ -99,7 +99,7 @@ def productDetails(request, pk):
 
     if request.POST:
         result = request.POST.get("review")
-        print(result)
+       
 
         review = Review.objects.create(
             review_body=result, user=request.user, product=data)
@@ -112,7 +112,8 @@ def productDetails(request, pk):
 @login_required(login_url='login')
 def cart(request, pk):
     obj = Product.objects.get(id=pk)
-    cart = Cart.objects.all()
+    cart = Cart.objects.filter(user=request.user)
+    
 
     for i in cart:
         if i.product.id == obj.id:
@@ -126,15 +127,22 @@ def cart(request, pk):
 
 
 def cartdeatil(request):
+    
+
 
     cart = Cart.objects.filter(user=request.user)
+    totalprice=0
+    for i in cart:
+        totalprice = i.product.price+totalprice
+
+    
     
     
 
     if len(cart) == 0:
         return redirect('index')
     else:
-        context = {'cart': cart}
+        context = {'cart': cart,'total':totalprice}
 
 
     return render(request, 'cart.html', context)
@@ -159,13 +167,9 @@ def reviewDelet(request, pk):
         return redirect('productdetails', pk=review.product.id)
 
 @login_required(login_url='login')
-def buyProduct(request,**kward):
-    if kward['cartbuy']:
-        print(kward['cartbuy'])
+def buyProduct(request,pk):
     
     
-    pk=kward['pk']
-    print(pk)
     product = Product.objects.get(id=pk)
     if request.POST:
         address = request.POST.get('address')
@@ -205,6 +209,20 @@ def buyProductfromcart(request):
 
 def userorder(request):
     buyedproduct = Buyproduct.objects.filter(user=request.user)
-    print(buyedproduct)
+    
     context = {'buyedproduct': buyedproduct}
     return render (request,'userorder.html', context)
+
+
+def cancelOrder(request,pk): 
+    cancelorder=Buyproduct.objects.filter(id=pk)
+    context={'cancelorder':cancelorder}
+   
+
+    if request.method == 'POST':
+        cancelorder.delete()
+        
+        
+        return redirect ('index')    
+
+    return render(request,'cancelorder.html',context)
