@@ -15,16 +15,16 @@
           
           <button class="btn btn-outline-info "><a href="{% url 'cart' data.id %} " class="text-black">add to cart</a></button>
       <h6>{% include "messages.html" %}</h6>
-      <div class="mt-2"> {% if authenticated %}
+      <div class="mt-2"> 
         
     
         <form action="" method="POST">{% csrf_token %}
-          <input type="text" name="review" placeholder="post your review">
-          <input type="submit" value="post">
+          <input type="text" name="review" placeholder="post your review" style="border-radius: 5px;">
+          <input class="btn btn-outline-info" type="submit" value="post"  style="border-radius: 5px;>
         </form>
 
         
-        {% endif %}
+       
         <h5>reviews</h5>
       </div >
       <div class="mt-2">
@@ -40,8 +40,8 @@
          
           
           
-          <button><a href="{% url 'delet' i.id %}">delet</a></button></span>
-        <br> <br>
+          <button class="btn btn-outline-info" style="border-radius: 5px; background-color: beige;"><a href="{% url 'delet' i.id %}">delet</a></button></span>
+        <br> 
         {% endif %}
           
         {% endfor %}

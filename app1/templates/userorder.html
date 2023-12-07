@@ -1,39 +1,42 @@
-{% extends "index.html" %}
-
-{% block userorder %}
-
-
+{% extends "index.html" %} {% block userorder %}
 
 <div class="container">
-    <div class="row">
-        {% if buyedproduct %}
-          
-        {% for i in buyedproduct  %}
-        <div class="card shadow m-3  " style="background-color: antiquewhite; width: 30%;">
-            
+  <div class="row">
+    {% if buyedproduct %} {% for i in buyedproduct %}
+    <div
+      class="card shadow m-3"
+      style="background-color: antiquewhite; width: 30%"
+    >
+      <h5 class="mt-3">
+        <br />
+        <h3>{{i.product}}</h3>
+        <br />
 
-                <h5 class="mt-3"> <br>
-                <h3>{{i.product}}</h3> <br>
-                
-                <img src="{{i.product.image.url}}" alt="" style="height: 50px; width: 50px;">
-                quantity :{{i.qty}}
-                <br>
-                purchased date : {{i.purchased_time}}
+        <img
+          src="{{i.product.image.url}}"
+          alt=""
+          style="height: 50px; width: 50px"
+        />
+        quantity :{{i.qty}}
+        <br />
+        purchased date : {{i.purchased_time}}
 
-
-                <button style="border-radius: 10px; background-color: aqua; text-decoration-color: black;"><a href="{% url 'cancelorder' i.id %}">cancel order</a></button>
-            </h5>
-
-        </div>
-        {% endfor %}
+        <button
+          style="
+            border-radius: 10px;
+            background-color: aqua;
+            text-decoration-color: black;
+          "
+        >
+          <a href="{% url 'cancelorder' i.id %}">cancel order</a>
+        </button>
+      </h5>
     </div>
-    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
 
-    <h5 style="background-color: bisque; display: flex; align-items: center; justify-content: center; margin: 20px;">you have no order</h5>
-
+  <!-- <h5 style="background-color: bisque; display: flex; align-items: center; justify-content: center; margin: 20px;">you have no order</h5> -->
 </div>
 
-  
-
-  
 {% endblock userorder %}

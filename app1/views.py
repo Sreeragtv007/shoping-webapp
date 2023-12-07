@@ -32,8 +32,6 @@ def index(request):
         # if page is empty then return last page
         page_obj = p.page(p.num_pages)
 
-       
-
     context = {'page_obj': page_obj, 'category': category}
     # sending the page object to index.html
     return render(request, 'index.html', context)
@@ -99,7 +97,6 @@ def productDetails(request, pk):
 
     if request.POST:
         result = request.POST.get("review")
-       
 
         review = Review.objects.create(
             review_body=result, user=request.user, product=data)
@@ -109,41 +106,35 @@ def productDetails(request, pk):
 
     return render(request, 'productdetails.html', context)
 
+
 @login_required(login_url='login')
 def cart(request, pk):
     obj = Product.objects.get(id=pk)
     cart = Cart.objects.filter(user=request.user)
-    
-
     for i in cart:
-        if i.product.id == obj.id:
-            messages.info(request, "product already added")
-            return redirect('productdetails', pk=obj.id)
+            if i.product.id == obj.id:
+                messages.info(request, "product already added")
+                return redirect('productdetails', pk=obj.id)
 
     cart = Cart.objects.create(user=request.user, product=obj)
     messages.info(request, "product added to cart")
 
     return redirect('productdetails', pk=obj.id)
+   
 
 
 def cartdeatil(request):
-    
-
 
     cart = Cart.objects.filter(user=request.user)
-    totalprice=0
+    totalprice = 0
     for i in cart:
         totalprice = i.product.price+totalprice
 
-    
-    
-    
-
     if len(cart) == 0:
+        messages.info(request,'cart is empty')
         return redirect('index')
     else:
-        context = {'cart': cart,'total':totalprice}
-
+        context = {'cart': cart, 'total': totalprice}
 
     return render(request, 'cart.html', context)
 
@@ -166,10 +157,10 @@ def reviewDelet(request, pk):
     else:
         return redirect('productdetails', pk=review.product.id)
 
+
 @login_required(login_url='login')
-def buyProduct(request,pk):
-    
-    
+def buyProduct(request, pk):
+
     product = Product.objects.get(id=pk)
     if request.POST:
         address = request.POST.get('address')
@@ -187,42 +178,39 @@ def buyProduct(request,pk):
 
 
 def buyProductfromcart(request):
-     
-     cartproduct = Cart.objects.filter(user=request.user)
-     context={'cartproduct':cartproduct}
 
-     if request.POST:
-            address = request.POST.get('address')
-            pincode = request.POST.get('pincode')
-            qty = request.POST.get('qty')
+    cartproduct = Cart.objects.filter(user=request.user)
+    context = {'cartproduct': cartproduct}
 
+    if request.POST:
+        address = request.POST.get('address')
+        pincode = request.POST.get('pincode')
+        qty = request.POST.get('qty')
 
-            for i in cartproduct:
-                buyproduct = Buyproduct.objects.create(
-            user=request.user, product=i.product, qty=qty, address=address, pincode=pincode)
-            return redirect ('index')
-     return render(request,'buyproductfromcart.html',context)
-    
-    
+        for i in cartproduct:
+            buyproduct = Buyproduct.objects.create(
+                user=request.user, product=i.product, qty=qty, address=address, pincode=pincode)
+        return redirect('index')
+    return render(request, 'buyproductfromcart.html', context)
 
-   
 
 def userorder(request):
     buyedproduct = Buyproduct.objects.filter(user=request.user)
-    
-    context = {'buyedproduct': buyedproduct}
-    return render (request,'userorder.html', context)
+    if buyedproduct:
+
+        context = {'buyedproduct': buyedproduct}
+        return render(request, 'userorder.html', context)
+    messages.info(request,'you have no orders')
+    return redirect('index')
 
 
-def cancelOrder(request,pk): 
-    cancelorder=Buyproduct.objects.filter(id=pk)
-    context={'cancelorder':cancelorder}
-   
+def cancelOrder(request, pk):
+    cancelorder = Buyproduct.objects.filter(id=pk)
+    context = {'cancelorder': cancelorder}
 
     if request.method == 'POST':
         cancelorder.delete()
-        
-        
-        return redirect ('index')    
+        messages.info(request, "you order has been sucessfully canceled")
+        return redirect('index')
 
-    return render(request,'cancelorder.html',context)
+    return render(request, 'cancelorder.html', context)
