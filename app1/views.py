@@ -112,15 +112,14 @@ def cart(request, pk):
     obj = Product.objects.get(id=pk)
     cart = Cart.objects.filter(user=request.user)
     for i in cart:
-            if i.product.id == obj.id:
-                messages.info(request, "product already added")
-                return redirect('productdetails', pk=obj.id)
+        if i.product.id == obj.id:
+            messages.info(request, "product already added")
+            return redirect('productdetails', pk=obj.id)
 
     cart = Cart.objects.create(user=request.user, product=obj)
     messages.info(request, "product added to cart")
 
     return redirect('productdetails', pk=obj.id)
-   
 
 
 def cartdeatil(request):
@@ -131,7 +130,7 @@ def cartdeatil(request):
         totalprice = i.product.price+totalprice
 
     if len(cart) == 0:
-        messages.info(request,'cart is empty')
+        messages.info(request, 'cart is empty')
         return redirect('index')
     else:
         context = {'cart': cart, 'total': totalprice}
@@ -196,12 +195,15 @@ def buyProductfromcart(request):
 
 def userOrder(request):
     buyedproduct = Buyproduct.objects.filter(user=request.user)
-    if buyedproduct:
-        
+    print(buyedproduct)
+    for i in buyedproduct:
+        if i.orderstatus == "DELIVERED":
+            i.delete()
 
+    if buyedproduct:
         context = {'buyedproduct': buyedproduct}
         return render(request, 'userorder.html', context)
-    messages.info(request,'you have no orders')
+    messages.info(request, 'you have no orders')
     return redirect('index')
 
 
