@@ -34,6 +34,10 @@ class Cart(models.Model):
     qty=models.IntegerField(default=1)
     total=models.IntegerField(blank=True,null=True)
 
+# class Orderstatus(models.Model):
+#     status=models.TextField(blank=True, null=True,default='order submited sucessfully')
+
+
    
 class Buyproduct(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
@@ -42,4 +46,19 @@ class Buyproduct(models.Model):
     address=models.TextField(blank=True,null=True)
     pincode=models.IntegerField(blank=True,null=True)
     purchased_time=models.DateTimeField(auto_now=True)
+    totalprice=models.IntegerField(blank=True, null=True)
+
+    MONTH_CHOICES = (
+        ("WAITING FOR SHIPPING", "waiting for shipping"),
+        ("PRODUCT ON THE WAY", "product on the way"),
+        ("OUT OF DELIVERY", "out of delivery"),
+
+        ("DELIVERED", "delivered"),
+    )
+    orderstatus= models.CharField(max_length=50,
+                  choices=MONTH_CHOICES,
+                  default="WAITING FOR SHIPPING")
+    
+
+
 

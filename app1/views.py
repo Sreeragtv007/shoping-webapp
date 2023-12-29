@@ -194,9 +194,10 @@ def buyProductfromcart(request):
     return render(request, 'buyproductfromcart.html', context)
 
 
-def userorder(request):
+def userOrder(request):
     buyedproduct = Buyproduct.objects.filter(user=request.user)
     if buyedproduct:
+        
 
         context = {'buyedproduct': buyedproduct}
         return render(request, 'userorder.html', context)
