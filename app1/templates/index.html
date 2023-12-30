@@ -48,7 +48,7 @@
        
 
           <li class="nav-item ml-3">
-            <a class="nav-link pl-5" href=""><h6> welcome  {{user}}</h6></a>
+            <a class="nav-link pl-5" href="{% url 'userprofile' %}"><h6> welcome  {{user}}</h6></a>
           </li> 
           <li class="nav-item ml-3">
             <a class="nav-link pl-5" href="{% url 'userorder' %}"><h6> your order</h6></a>
@@ -77,6 +77,9 @@
       </div>
     </div>
   </nav>
+  {% block userprofile %}
+    
+  {% endblock userprofile %}
   {% block cancelorder %}
     
   {% endblock cancelorder %}

@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block userprofile %}
+  <div class="container">
+    <div class="row ">
+        user order
+
+        {% for i in obj  %}
+
+        <h4>{{i.product.name}}</h4>
+        <img
+          src="{{i.product.image.url}}"
+          alt=""
+          style="height: 100px; width: 100px"
+        />
+          
+        {% endfor %}
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock userprofile %}

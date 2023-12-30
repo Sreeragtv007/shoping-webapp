@@ -194,11 +194,8 @@ def buyProductfromcart(request):
 
 
 def userOrder(request):
-    buyedproduct = Buyproduct.objects.filter(user=request.user)
-    print(buyedproduct)
-    for i in buyedproduct:
-        if i.orderstatus == "DELIVERED":
-            i.delete()
+    buyedproduct = Buyproduct.objects.filter(user=request.user).exclude(orderstatus='DELIVERED')
+    
 
     if buyedproduct:
         context = {'buyedproduct': buyedproduct}
@@ -212,8 +209,17 @@ def cancelOrder(request, pk):
     context = {'cancelorder': cancelorder}
 
     if request.method == 'POST':
+        
         cancelorder.delete()
         messages.info(request, "you order has been sucessfully canceled")
         return redirect('index')
 
     return render(request, 'cancelorder.html', context)
+
+
+
+def userProfile(request):
+    orderdelivered=Buyproduct.objects.filter(orderstatus='DELIVERED')
+    context={'obj':orderdelivered}
+
+    return render(request,"userprofile.html",context)
