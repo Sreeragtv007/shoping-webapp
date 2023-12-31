@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+
+
+
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     desc = models.TextField()
@@ -46,7 +50,18 @@ class Cart(models.Model):
     total = models.IntegerField(blank=True, null=True)
 
 
+choice = (
+        ("WAITING FOR SHIPPING", "waiting for shipping"),
+        ("PRODUCT ON THE WAY", "product on the way"),
+        ("OUT OF DELIVERY", "out of delivery"),
+
+        ("DELIVERED", "delivered"),
+    )
+
+
+
 class Buyproduct(models.Model):
+    
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(
@@ -54,16 +69,16 @@ class Buyproduct(models.Model):
     qty = models.IntegerField(default=1)
     address = models.TextField(blank=True, null=True)
     pincode = models.IntegerField(blank=True, null=True)
-    purchased_time = models.DateTimeField(auto_now=True)
+    purchased_time = models.DateTimeField(auto_now_add=True)
     totalprice = models.IntegerField(blank=True, null=True)
-
-    choice = (
-        ("WAITING FOR SHIPPING", "waiting for shipping"),
-        ("PRODUCT ON THE WAY", "product on the way"),
-        ("OUT OF DELIVERY", "out of delivery"),
-
-        ("DELIVERED", "delivered"),
-    )
+    order_updated = models.DateTimeField(auto_now=True)
     orderstatus = models.CharField(max_length=50,
                                    choices=choice,
                                    default="WAITING FOR SHIPPING")
+    
+    def save(self, *args, **kwargs):
+        self.totalprice=int(self.qty) * int(self.product.price)
+        super().save(*args, **kwargs)
+   
+    
+
