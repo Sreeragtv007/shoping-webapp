@@ -14,10 +14,17 @@
       a{
         text-decoration: none;
       }
+      body {
+        background: linear-gradient(to right, #33ccff 0%, #ff99cc 100%);
+      }
+      .card{
+        background: linear-gradient(to right, #33ccff 0%, #ff99cc 100%);
+      }
+      
     </style>
    
   </head>
-  <body><nav class="navbar navbar-expand-lg text-white bg-info">
+  <body><nav class="navbar navbar-expand-lg text-white ">
     <div class="container-fluid">
       <a class="navbar-brand text-secondary" href="{% url 'index' %}">shopy</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +45,7 @@
             <a class="nav-link" href="{% url 'logout' %}">logout</a>
           </li>
         </li>
-        <button type="button" class="btn btn-info position-relative"><a class="text-dark" href="{% url 'cartdetail' %}">cart</a>
+        <button type="button" class="btn position-relative"><a class="text-dark" href="{% url 'cartdetail' %}">cart</a>
          
           <span  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {{count}}
@@ -77,6 +84,7 @@
       </div>
     </div>
   </nav>
+  
   {% block userprofile %}
     
   {% endblock userprofile %}

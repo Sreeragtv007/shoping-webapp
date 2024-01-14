@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -165,10 +166,21 @@ def buyProduct(request, pk):
         address = request.POST.get('address')
         pincode = request.POST.get('pincode')
         qty = request.POST.get('qty')
+        productname=product.name
 
         buyproduct = Buyproduct.objects.create(
             user=request.user, product=product, qty=qty, address=address, pincode=pincode)
         messages.info(request, "you purchase request is sucessfully created")
+
+        send_mail(
+            f"your order sucess fully created {productname}",
+            'sucsess',
+            "digitalmediaupdates007@gmail.com",
+            ["sreeragtv007@gmail.com"],
+            fail_silently=False,
+        )
+        print('working')
+
         return redirect('index')
 
     context = {'product': product}
@@ -212,13 +224,16 @@ def cancelOrder(request, pk):
 
         cancelorder.delete()
         messages.info(request, "you order has been sucessfully canceled")
+        if cancelOrder:
+            return redirect('userorder')
         return redirect('index')
 
     return render(request, 'cancelorder.html', context)
 
 
 def userProfile(request):
+
     orderdelivered = Buyproduct.objects.filter(orderstatus='DELIVERED')
     context = {'obj': orderdelivered}
 
-    return render(request, "userprofile.html")
+    return render(request, "userprofile.html", context)

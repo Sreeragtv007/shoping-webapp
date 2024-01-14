@@ -3,7 +3,9 @@
 {% block userprofile %}
   <div class="container">
     <div class="row ">
-        user order
+        <div class="">
+          <h5>your delivered  orders</h5>
+         
 
         {% for i in obj  %}
 
@@ -13,9 +15,15 @@
           alt=""
           style="height: 100px; width: 100px"
         />
+        
+        <h5>Quanty  : {{i.qty}}</h5>
+        <h6>total amount {{i.totalprice}}</h6>
+        <h6>{{i.orderstatus}} on {{i.order_updated}}</h6> 
           
         {% endfor %}
+    
     </div>
+        </div>
   </div>
 
 
