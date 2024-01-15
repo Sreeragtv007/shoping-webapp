@@ -125,3 +125,7 @@ class thumbnail(models.Model):
 
        
        super().save(*args, **kwargs) 
+       
+class Savepdf(models.Model):
+    name=models.TextField(blank=True, null=True)
+    file=models.FileField(upload_to='pdffile')

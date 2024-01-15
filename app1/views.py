@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Product, Category, Review, Cart, Buyproduct
+from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +7,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.http import FileResponse
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+import io
+# Import xhtml2pdf if using HTML templates
+
+# Import xhtml2pdf if using HTML templates
+
 
 # Create your views here.
 
@@ -172,14 +180,14 @@ def buyProduct(request, pk):
             user=request.user, product=product, qty=qty, address=address, pincode=pincode)
         messages.info(request, "you purchase request is sucessfully created")
 
-        send_mail(
-            f"your order sucess fully created {productname}",
-            'sucsess',
-            "digitalmediaupdates007@gmail.com",
-            ["sreeragtv007@gmail.com"],
-            fail_silently=False,
-        )
-        print('working')
+        # send_mail(
+        #     f"your order sucess fully created {productname}",
+        #     'sucsess',
+        #     "digitalmediaupdates007@gmail.com",
+        #     ["sreeragtv007@gmail.com"],
+        #     fail_silently=False,
+        # )
+        # print('working')
 
         return redirect('index')
 
@@ -237,3 +245,30 @@ def userProfile(request):
     context = {'obj': orderdelivered}
 
     return render(request, "userprofile.html", context)
+
+
+def generate_pdf(request):
+    # Fetch data to include in the PDF
+    data = 'pddff' # Replace with your data
+
+    # Create a PDF buffer in memory
+    buffer = io.BytesIO()
+
+    # Use ReportLab to generate the PDF content:
+    p = canvas.Canvas(buffer)
+    # ... Add PDF elements (text, images, etc.) using ReportLab's API
+    p.drawString(100, 100, "Hello, PDF!")
+
+    p.showPage()
+    p.save()
+
+    # Retrieve the generated PDF as bytes
+    pdf_file = buffer.getvalue()
+
+    # Create a new model instance and save the PDF:
+    my_model = Savepdf.objects.create(name=data)
+    my_model.file.save('generated_pdf.pdf', ContentFile(pdf_file))
+    return redirect('index')
+    # Return the PDF as a response (optional, for immediate download)
+    return FileResponse(buffer, as_attachment=True, filename='generated_pdf.pdf')
+
