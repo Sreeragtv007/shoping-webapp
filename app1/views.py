@@ -8,8 +8,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.http import FileResponse
-from django.http import FileResponse
+from django.core.files.base import ContentFile
 from reportlab.pdfgen import canvas
+
 import io
 # Import xhtml2pdf if using HTML templates
 
@@ -221,7 +222,7 @@ def userOrder(request):
         context = {'buyedproduct': buyedproduct}
         return render(request, 'userorder.html', context)
     messages.info(request, 'you have no orders')
-    return redirect('index')
+    return render(request, 'userorder.html')
 
 
 def cancelOrder(request, pk):
@@ -247,7 +248,10 @@ def userProfile(request):
     return render(request, "userprofile.html", context)
 
 
-def generate_pdf(request):
+def orderInvoice(request):
+    user=request.user
+    print(user)
+    
     # Fetch data to include in the PDF
     data = 'pddff' # Replace with your data
 
@@ -257,7 +261,11 @@ def generate_pdf(request):
     # Use ReportLab to generate the PDF content:
     p = canvas.Canvas(buffer)
     # ... Add PDF elements (text, images, etc.) using ReportLab's API
-    p.drawString(100, 100, "Hello, PDF!")
+    # p.drawString(100, 100, f"custermer name :{user}")
+    p.drawString(200,0,'Date')
+	# p.drawString(90,703,'Time')
+	
+	
 
     p.showPage()
     p.save()
