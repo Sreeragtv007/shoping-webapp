@@ -242,18 +242,16 @@ def cancelOrder(request, pk):
 
 def userProfile(request):
 
-    orderdelivered = Buyproduct.objects.filter(orderstatus='DELIVERED')
+    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
     context = {'obj': orderdelivered}
 
     return render(request, "userprofile.html", context)
 
 
 def orderInvoice(request):
-    user=request.user
-    print(user)
-    
+    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
+    print(orderdelivered)
     # Fetch data to include in the PDF
-    data = 'pddff' # Replace with your data
 
     # Create a PDF buffer in memory
     buffer = io.BytesIO()
@@ -262,10 +260,13 @@ def orderInvoice(request):
     p = canvas.Canvas(buffer)
     # ... Add PDF elements (text, images, etc.) using ReportLab's API
     # p.drawString(100, 100, f"custermer name :{user}")
-    p.drawString(200,0,'Date')
-	# p.drawString(90,703,'Time')
-	
-	
+    p.drawString(0,800,'Date')
+    p.drawString(0,700,'Product name :')
+    p.drawString(0,600,'quantity')
+    p.drawString(0,500,'total price')
+    p.drawString(0,400,'address')
+
+    p.drawString(0,400,'purchase time')
 
     p.showPage()
     p.save()
@@ -274,7 +275,7 @@ def orderInvoice(request):
     pdf_file = buffer.getvalue()
 
     # Create a new model instance and save the PDF:
-    my_model = Savepdf.objects.create(name=data)
+    my_model = Savepdf.objects.create(name='example1')
     my_model.file.save('generated_pdf.pdf', ContentFile(pdf_file))
     return redirect('index')
     # Return the PDF as a response (optional, for immediate download)
