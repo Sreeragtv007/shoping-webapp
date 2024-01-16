@@ -10,6 +10,8 @@ from django.core.mail import send_mail
 from django.http import FileResponse
 from django.core.files.base import ContentFile
 from reportlab.pdfgen import canvas
+import datetime 
+from pathlib import Path
 
 import io
 # Import xhtml2pdf if using HTML templates
@@ -249,34 +251,48 @@ def userProfile(request):
 
 
 def orderInvoice(request):
-    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
-    print(orderdelivered)
+    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED').filter(invoice_created=False)
+   
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    
     # Fetch data to include in the PDF
+    for i in orderdelivered:
+        time = datetime.datetime.today()  
+        print(i.product.image.url) 
+        image=str(i.product.image.url)
+        
+        base='C:/Users/sreerag/Desktop/media/p1/shoping-webapp'
+        imagepath=base + image
+        
+        # Create a PDF buffer in memory
+        buffer = io.BytesIO()
+        
 
-    # Create a PDF buffer in memory
-    buffer = io.BytesIO()
+        # Use ReportLab to generate the PDF content:
+        p = canvas.Canvas(buffer)
+        # ... Add PDF elements (text, images, etc.) using ReportLab's API
+        # p.drawString(100, 100, f"custermer name :{user}")
+        p.drawString(0,800,f'Date{time}')
+        p.drawString(100,750,f'Product name :{i.product.name}')
+        p.drawImage(imagepath, 100, 730, preserveAspectRatio=True, mask='auto')
+        p.drawString(100,700,f'quantity  :{i.qty}')
+        p.drawString(100,650,f'total price  :{i.totalprice}')
+        p.drawString(100,600,f'address :{i.address}')
 
-    # Use ReportLab to generate the PDF content:
-    p = canvas.Canvas(buffer)
-    # ... Add PDF elements (text, images, etc.) using ReportLab's API
-    # p.drawString(100, 100, f"custermer name :{user}")
-    p.drawString(0,800,'Date')
-    p.drawString(0,700,'Product name :')
-    p.drawString(0,600,'quantity')
-    p.drawString(0,500,'total price')
-    p.drawString(0,400,'address')
+        p.drawString(0,550,f'purchase time  :{i.purchased_time}')
 
-    p.drawString(0,400,'purchase time')
-
-    p.showPage()
-    p.save()
+        p.showPage()
+        p.save()
 
     # Retrieve the generated PDF as bytes
-    pdf_file = buffer.getvalue()
+        pdf_file = buffer.getvalue()
 
-    # Create a new model instance and save the PDF:
-    my_model = Savepdf.objects.create(name='example1')
-    my_model.file.save('generated_pdf.pdf', ContentFile(pdf_file))
+        # Create a new model instance and save the PDF:
+        my_model = Savepdf.objects.create(name='example1')
+        my_model.file.save(f'generated_pdf{i.id}.pdf', ContentFile(pdf_file))
+        i.invoice_created=True
+        i.save()
+    
     return redirect('index')
     # Return the PDF as a response (optional, for immediate download)
     return FileResponse(buffer, as_attachment=True, filename='generated_pdf.pdf')

@@ -106,7 +106,7 @@ class Buyproduct(models.Model):
     orderstatus = models.CharField(max_length=50,
                                    choices=choice,
                                    default="WAITING FOR SHIPPING")
-
+    invoice_created=models.BooleanField(blank=True, null=True,default=False)
     def save(self, *args, **kwargs):
         self.totalprice = int(self.qty) * int(self.product.price)
         super().save(*args, **kwargs)
