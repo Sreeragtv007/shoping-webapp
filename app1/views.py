@@ -249,18 +249,8 @@ def cancelOrder(request, pk):
 
 def userProfile(request):
 
-    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
-    context = {'obj': orderdelivered}
-
-    return render(request, "userprofile.html", context)
-
-
-def orderInvoice(request):
     orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED').filter(invoice_created=False)
-   
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    
-    # Fetch data to include in the PDF
+    context = {'obj': orderdelivered}
     for i in orderdelivered:
         time = datetime.datetime.today()  
         file_path = os.path.join(settings.MEDIA_ROOT,i.product.image.path)
@@ -296,9 +286,11 @@ def orderInvoice(request):
         i.invoice_created=True
         i.save()
     
-    return redirect('index')
-    # Return the PDF as a response (optional, for immediate download)
-    return FileResponse(buffer, as_attachment=True, filename='generated_pdf.pdf')
+
+    return render(request, "userprofile.html", context)
+
+
+
 
 def downloadInvoice(request,pk):
     obj=Savepdf.objects.get(product_id=pk)
