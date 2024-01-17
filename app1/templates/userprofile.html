@@ -2,8 +2,8 @@
 
 {% block userprofile %}
   <div class="container">
-    <div class="row ">
-        <div class="">
+    <div class="row d-flex ">
+        <div class="col-lg-2">
           <h5>your delivered  orders</h5>
          
 
@@ -19,7 +19,8 @@
         <h5>Quanty  : {{i.qty}}</h5>
         <h6>total amount {{i.totalprice}}</h6>
         <h6>{{i.orderstatus}} on {{i.order_updated}}</h6> 
-          
+        <a href="{% url 'download' i.product.id %}"><span class=""> <h5>download invoice</h5></span></a>
+          <hr>
         {% endfor %}
     
     </div>

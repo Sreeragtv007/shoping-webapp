@@ -12,6 +12,11 @@ from django.core.files.base import ContentFile
 from reportlab.pdfgen import canvas
 import datetime 
 from pathlib import Path
+from reportlab.lib.units import inch
+import os
+from django.conf import settings
+from django.http import HttpResponse, Http404
+from pathlib import Path
 
 import io
 # Import xhtml2pdf if using HTML templates
@@ -258,11 +263,7 @@ def orderInvoice(request):
     # Fetch data to include in the PDF
     for i in orderdelivered:
         time = datetime.datetime.today()  
-        print(i.product.image.url) 
-        image=str(i.product.image.url)
-        
-        base='C:/Users/sreerag/Desktop/media/p1/shoping-webapp'
-        imagepath=base + image
+        file_path = os.path.join(settings.MEDIA_ROOT,i.product.image.path)
         
         # Create a PDF buffer in memory
         buffer = io.BytesIO()
@@ -274,7 +275,7 @@ def orderInvoice(request):
         # p.drawString(100, 100, f"custermer name :{user}")
         p.drawString(0,800,f'Date{time}')
         p.drawString(100,750,f'Product name :{i.product.name}')
-        p.drawImage(imagepath, 100, 730, preserveAspectRatio=True, mask='auto')
+        p.drawImage(file_path, 500, 730,75,75)
         p.drawString(100,700,f'quantity  :{i.qty}')
         p.drawString(100,650,f'total price  :{i.totalprice}')
         p.drawString(100,600,f'address :{i.address}')
@@ -289,6 +290,8 @@ def orderInvoice(request):
 
         # Create a new model instance and save the PDF:
         my_model = Savepdf.objects.create(name='example1')
+        my_model.product=i.product
+        my_model.save()
         my_model.file.save(f'generated_pdf{i.id}.pdf', ContentFile(pdf_file))
         i.invoice_created=True
         i.save()
@@ -296,4 +299,19 @@ def orderInvoice(request):
     return redirect('index')
     # Return the PDF as a response (optional, for immediate download)
     return FileResponse(buffer, as_attachment=True, filename='generated_pdf.pdf')
+
+def downloadInvoice(request,pk):
+    obj=Savepdf.objects.get(product_id=pk)
+    file_path = os.path.join(settings.MEDIA_ROOT,obj.file.path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404
+    
+    
+    
+
+
 

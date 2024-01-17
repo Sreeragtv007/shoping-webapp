@@ -129,3 +129,4 @@ class thumbnail(models.Model):
 class Savepdf(models.Model):
     name=models.TextField(blank=True, null=True)
     file=models.FileField(upload_to='pdffile')
+    product=models.OneToOneField(Product,on_delete=models.CASCADE,blank=True, null=True)
