@@ -26,9 +26,7 @@ class Product(models.Model):
     #     resized=original.resize((100,100))
 
     #     super().save(*args, **kwargs)
-    def latest(self):
-        obj=Product.objects.latest('id')
-        print(obj)
+    
 
     
     # def save(self, **kwargs):
@@ -47,8 +45,8 @@ class Product(models.Model):
 
     
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
     
 
     class Meta:
@@ -107,9 +105,13 @@ class Buyproduct(models.Model):
                                    choices=choice,
                                    default="WAITING FOR SHIPPING")
     invoice_created=models.BooleanField(blank=True, null=True,default=False)
+    file=models.FileField(upload_to='pdffile',blank=True, null=True)
+    
     def save(self, *args, **kwargs):
         self.totalprice = int(self.qty) * int(self.product.price)
         super().save(*args, **kwargs)
+    def __str__(self):
+        return self.product.name
 
 
 class thumbnail(models.Model):
@@ -126,7 +128,6 @@ class thumbnail(models.Model):
        
        super().save(*args, **kwargs) 
        
-class Savepdf(models.Model):
-    name=models.TextField(blank=True, null=True)
-    file=models.FileField(upload_to='pdffile')
-    product=models.OneToOneField(Product,on_delete=models.CASCADE,blank=True, null=True)
+# class Savepdf(models.Model):
+#     name=models.TextField(blank=True, null=True)
+#     product=models.OneToOneField(Product,on_delete=models.CASCADE,blank=True, null=True)

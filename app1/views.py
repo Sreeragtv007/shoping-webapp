@@ -249,51 +249,53 @@ def cancelOrder(request, pk):
 
 def userProfile(request):
 
-    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED').filter(invoice_created=False)
+    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
+    invoice = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED').filter(invoice_created=False)
     context = {'obj': orderdelivered}
-    for i in orderdelivered:
-        time = datetime.datetime.today()  
-        file_path = os.path.join(settings.MEDIA_ROOT,i.product.image.path)
+    if invoice:
+        for i in invoice:
+            time = datetime.datetime.today()  
+            file_path = os.path.join(settings.MEDIA_ROOT,i.product.image.path)
+            
+            # Create a PDF buffer in memory
+            buffer = io.BytesIO()
+            
+
+            # Use ReportLab to generate the PDF content:
+            p = canvas.Canvas(buffer)
+            # ... Add PDF elements (text, images, etc.) using ReportLab's API
+            # p.drawString(100, 100, f"custermer name :{user}")
+            p.drawString(30,800,f'Date{time}')
+            p.drawString(100,750,f'Product name :{i.product.name}')
+            p.drawImage(file_path, 500,750,100)
+            p.drawString(100,700,f'quantity  :{i.qty}')
+            p.drawString(100,650,f'total price  :{i.totalprice}')
+            p.drawString(100,600,f'address :{i.address}{i.pincode}')
+
+            p.drawString(100,550,f'purchase time  :{i.purchased_time}')
+
+            p.showPage()
+            p.save()
+
+        # Retrieve the generated PDF as bytes
+            pdf_file = buffer.getvalue()
+
+            # Create a new model instance and save the PDF:
+            # my_model = Savepdf.objects.create(name='example1')
+           
+            i.file.save(f'generated_pdf{i.id}.pdf', ContentFile(pdf_file))
+            i.invoice_created=True
+            i.save()
         
-        # Create a PDF buffer in memory
-        buffer = io.BytesIO()
-        
 
-        # Use ReportLab to generate the PDF content:
-        p = canvas.Canvas(buffer)
-        # ... Add PDF elements (text, images, etc.) using ReportLab's API
-        # p.drawString(100, 100, f"custermer name :{user}")
-        p.drawString(0,800,f'Date{time}')
-        p.drawString(100,750,f'Product name :{i.product.name}')
-        p.drawImage(file_path, 500, 730,75,75)
-        p.drawString(100,700,f'quantity  :{i.qty}')
-        p.drawString(100,650,f'total price  :{i.totalprice}')
-        p.drawString(100,600,f'address :{i.address}')
-
-        p.drawString(0,550,f'purchase time  :{i.purchased_time}')
-
-        p.showPage()
-        p.save()
-
-    # Retrieve the generated PDF as bytes
-        pdf_file = buffer.getvalue()
-
-        # Create a new model instance and save the PDF:
-        my_model = Savepdf.objects.create(name='example1')
-        my_model.product=i.product
-        my_model.save()
-        my_model.file.save(f'generated_pdf{i.id}.pdf', ContentFile(pdf_file))
-        i.invoice_created=True
-        i.save()
-    
-
+            return render(request, "userprofile.html", context)
     return render(request, "userprofile.html", context)
 
 
 
 
 def downloadInvoice(request,pk):
-    obj=Savepdf.objects.get(product_id=pk)
+    obj=Buyproduct.objects.get(product_id=pk)
     file_path = os.path.join(settings.MEDIA_ROOT,obj.file.path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
