@@ -3,21 +3,23 @@
 
 
 {% block product %}
+
   
 
 {% for i in pr  %}
+<div class="" style="background-color: rgb(201, 123, 21);">
+  
 
-
-<div class="col-sm-6 col-md-4 col-lg-2 ">
-  <a href="{% url 'productdetails' i.id %}"><div class="card"><div class="card" style="width: 30100%0px; height: 250px;">
-    <img src="{{i.image.url}}" class="card-img-top" alt="..." style="height: 150px; width: 200px;">
-    <div class="card-body">
-      <h3 class="card-title" style="width: auto;">{{i.name}}</h3>
-      <p class="card-text">{{i.price}}.</p>
-      
-    </div>
+<div class=" card shadow col-sm-6 col-md-4 col-lg-2 >
+  <a href="{% url 'productdetails' i.id %}"><div class=""><div>
+    <img src="{{i.image.url}}" class="card-img" alt="..." style="height: 150px; width: 200px;">
+    
+      <h3 class="card-title">{{i.name}}</h3>
+      <h3>{{i.price}}</h3>
+     
   </div></div></a>
   
+</div>
 </div>
 {% endfor %}
 {% endblock product %}

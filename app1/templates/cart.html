@@ -8,9 +8,9 @@
     
 
     {% for i in cart  %}
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <a href=""><div class="card mt-5"><div class="" style="width: 80%; height: 100%; align-items: center; justify-items: center; justify-content: center;">
-        <img src="{{i.product.image.url}}" class="card-img-top mt-3 " alt="..." style="height: 150px; width: 100%;">
+    <div class="col-sm-6 col-md-4 col-lg-3 ">
+      <a href=""><div class="card shadow mt-5"><div class="">
+        <img src="{{i.product.image.url}}" class="card-img-top mt-3 " alt="..."">
         <div class="card-body">
           <h5 class="card-title" style="width: auto;">{{i.product.name}}</h5>
           <p class="card-text">price:  {{i.product.price}}.</p>

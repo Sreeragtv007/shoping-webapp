@@ -26,14 +26,8 @@
         </h6>
         purchased date : {{i.purchased_time}}
 
-        <button
-          style="
-            border-radius: 10px;
-            background-color: aqua;
-            text-decoration-color: black;
-          "
-        >
-          <a class="m-3" href="{% url 'cancelorder' i.id %}">cancel order</a>
+        <button class="cancel-button">
+          <a class="  m-4" href="{% url 'cancelorder' i.id %}">cancel order</a>
         </button>
       </h5></a>
     </div>

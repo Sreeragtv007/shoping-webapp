@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 from django.contrib.auth.models import User
 import sys
@@ -7,52 +8,35 @@ from django.db import models
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image
 import PIL
+import os
+from django.conf import settings
+
+
 # Create your models here.
 
-
 class Product(models.Model):
-    name = models.CharField(max_length=50,blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
     desc = models.TextField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
     image = models.ImageField(
         upload_to='images', default='image not available')
-    
-    thumbnails = models.ImageField(upload_to='imagereduced', blank=True)
-    
-    categ = models.ForeignKey('category', on_delete=models.CASCADE,blank=True, null=True)
+
+    thumbnails = models.ImageField(upload_to='thumbnail', blank=True)
+
+    categ = models.ForeignKey(
+        'category', on_delete=models.CASCADE, blank=True, null=True)
     created = models.DateTimeField(auto_now=True)
-    # def save(self, *args, **kwargs):
-    #     original=Image.open(self.image)
-    #     resized=original.resize((100,100))
-
-    #     super().save(*args, **kwargs)
-    
-
-    
-    # def save(self, **kwargs):
-    #     output_size = (100,100)
-    #     output_thumb = BytesIO()
-
-    #     img = Image.open(self.image)
-    #     img_name = self.image.name.split('.')[0]
-
-    #     img.thumbnail(output_size)
-    #     img.save(output_thumb,format='JPEG',quality=90)
-
-    #     self.thumbnails = InMemoryUploadedFile(output_thumb, 'ImageField', f"{img_name}_thumb.jpg", 'image/jpeg', sys.getsizeof(output_thumb), None)
-
-    #     super(Product, self).save()
-
-    
+  
+        
+        
+        
 
     def __str__(self):
         return self.name
-    
 
     class Meta:
         ordering = ['-created']
 
-    
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -104,30 +88,34 @@ class Buyproduct(models.Model):
     orderstatus = models.CharField(max_length=50,
                                    choices=choice,
                                    default="WAITING FOR SHIPPING")
-    invoice_created=models.BooleanField(blank=True, null=True,default=False)
-    file=models.FileField(upload_to='pdffile',blank=True, null=True)
-    
+    invoice_created = models.BooleanField(blank=True, null=True, default=False)
+    file = models.FileField(upload_to='pdffile', blank=True, null=True)
+
     def save(self, *args, **kwargs):
         self.totalprice = int(self.qty) * int(self.product.price)
         super().save(*args, **kwargs)
+
     def __str__(self):
         return self.product.name
 
-
 class thumbnail(models.Model):
-    image=models.ImageField(upload_to='images1',blank=True, null=True)
-    thumbnail_img=models.ImageField(upload_to='thumbnails',blank=True, null=True)
-
-
+    image=models.ImageField(upload_to='images')
+    thumnails=models.ImageField(upload_to='thumbnails',blank=True, null=True,default='thumbnails/.jpg')
+    
     def save(self, *args, **kwargs):
-       original=Image.open(self.image)
-       print(original)
-    #    resized=original.resize((100,100))
-    #    resized.save(self.thumbnail_img.path)
+        a=type(self.image)
+        super().save(*args, **kwargs)
+        # creating a object  
+        image = Image.open(self.image.path) 
+        print(image)
+        MAX_SIZE = (50, 50) 
+        
+        image.thumbnail(MAX_SIZE) 
+        image.save(self.thumnails.path)
+        
+         
+       
+               
 
-       
-       super().save(*args, **kwargs) 
-       
-# class Savepdf(models.Model):
-#     name=models.TextField(blank=True, null=True)
-#     product=models.OneToOneField(Product,on_delete=models.CASCADE,blank=True, null=True)
+
+

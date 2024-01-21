@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.http import FileResponse
 from django.core.files.base import ContentFile
 from reportlab.pdfgen import canvas
-import datetime 
+import datetime
 from pathlib import Path
 from reportlab.lib.units import inch
 import os
@@ -182,7 +182,7 @@ def buyProduct(request, pk):
         address = request.POST.get('address')
         pincode = request.POST.get('pincode')
         qty = request.POST.get('qty')
-        productname=product.name
+        productname = product.name
 
         buyproduct = Buyproduct.objects.create(
             user=request.user, product=product, qty=qty, address=address, pincode=pincode)
@@ -249,30 +249,26 @@ def cancelOrder(request, pk):
 
 def userProfile(request):
 
-    orderdelivered = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED')
-    invoice = Buyproduct.objects.filter(user=request.user,orderstatus='DELIVERED').filter(invoice_created=False)
+    orderdelivered = Buyproduct.objects.filter(
+        user=request.user, orderstatus='DELIVERED')
+    invoice = Buyproduct.objects.filter(
+        user=request.user, orderstatus='DELIVERED').filter(invoice_created=False)
     context = {'obj': orderdelivered}
     if invoice:
         for i in invoice:
-            time = datetime.datetime.today()  
-            file_path = os.path.join(settings.MEDIA_ROOT,i.product.image.path)
-            
+            time = datetime.datetime.today()
+            file_path = os.path.join(settings.MEDIA_ROOT, i.product.image.path)
+
             # Create a PDF buffer in memory
             buffer = io.BytesIO()
-            
-
-            # Use ReportLab to generate the PDF content:
             p = canvas.Canvas(buffer)
-            # ... Add PDF elements (text, images, etc.) using ReportLab's API
-            # p.drawString(100, 100, f"custermer name :{user}")
-            p.drawString(30,800,f'Date{time}')
-            p.drawString(100,750,f'Product name :{i.product.name}')
-            p.drawImage(file_path, 500,750,100)
-            p.drawString(100,700,f'quantity  :{i.qty}')
-            p.drawString(100,650,f'total price  :{i.totalprice}')
-            p.drawString(100,600,f'address :{i.address}{i.pincode}')
-
-            p.drawString(100,550,f'purchase time  :{i.purchased_time}')
+            p.drawString(30, 800, f'Date{time}')
+            p.drawString(100, 750, f'Product name :{i.product.name}')
+            p.drawImage(file_path, 400, 700, 100, 100)
+            p.drawString(100, 700, f'quantity  :{i.qty}')
+            p.drawString(100, 650, f'total price  :{i.totalprice}')
+            p.drawString(100, 600, f'address :{i.address}{i.pincode}')
+            p.drawString(100, 550, f'purchase time  :{i.purchased_time}')
 
             p.showPage()
             p.save()
@@ -282,30 +278,23 @@ def userProfile(request):
 
             # Create a new model instance and save the PDF:
             # my_model = Savepdf.objects.create(name='example1')
-           
+
             i.file.save(f'generated_pdf{i.id}.pdf', ContentFile(pdf_file))
-            i.invoice_created=True
+            i.invoice_created = True
             i.save()
-        
 
             return render(request, "userprofile.html", context)
     return render(request, "userprofile.html", context)
 
 
-
-
-def downloadInvoice(request,pk):
-    obj=Buyproduct.objects.get(product_id=pk)
-    file_path = os.path.join(settings.MEDIA_ROOT,obj.file.path)
+def downloadInvoice(request, pk):
+    obj = Buyproduct.objects.get(product_id=pk)
+    file_path = os.path.join(settings.MEDIA_ROOT, obj.file.path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            response = HttpResponse(
+                fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + \
+                os.path.basename(file_path)
             return response
     raise Http404
-    
-    
-    
-
-
-

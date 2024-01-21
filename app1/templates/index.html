@@ -1,28 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>shopy</title>
+    
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <style>
-      a{
-        text-decoration: none;
-      }
-      body {
-        background: linear-gradient(to bottom, #33ccff 0%, #ccff99 100%);      }
-      .card{
-        background: linear-gradient(to bottom, #33ccff 0%, #ccff99 100%);      }
-      
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  
+ 
    
   </head>
-  <body><nav class="navbar navbar-expand-lg text-white ">
+  <body><nav class="navbar navbar-expand-lg  ">
     <div class="container-fluid">
       <a class="navbar-brand text-secondary" href="{% url 'index' %}">shopy</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,12 +138,12 @@
    {% for i in page_obj.object_list  %}
       
     
-    <div class="col-sm-6 col-md-4 mt-5 mb-4">
-      <a href="{% url 'productdetails' i.id %}"><div class=""><div class="card" style="width: 100%; height: 250px; align-items: center; ">
+    <div class=" card col-sm-6 col-lg-4">
+      <a href="{% url 'productdetails' i.id %}"><div class=""><div>
         <img src="{{i.image.url}}" class="card-img-top mt-4" alt="..." style="height: 150px; width: 200px;">
         <div class="card-body">
           <h5 class="card-title" style="width: auto;">{{i.name}}</h5>
-          <p class="card-text">price:  {{i.price}}.</p>
+          <h5 class="card-text">price:  {{i.price}}</h5>
           
         </div>
       </div></div></a>
