@@ -100,19 +100,9 @@ class Buyproduct(models.Model):
 
 class thumbnail(models.Model):
     image=models.ImageField(upload_to='images')
-    thumnails=models.ImageField(upload_to='thumbnails',blank=True, null=True,default='thumbnails/.jpg')
+    thumnails=models.ImageField(upload_to='thumbnails',blank=True, null=True)
     
-    def save(self, *args, **kwargs):
-        a=type(self.image)
-        super().save(*args, **kwargs)
-        # creating a object  
-        image = Image.open(self.image.path) 
-        print(image)
-        MAX_SIZE = (50, 50) 
-        
-        image.thumbnail(MAX_SIZE) 
-        image.save(self.thumnails.path)
-        
+   
          
        
                

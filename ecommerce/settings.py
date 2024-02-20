@@ -160,4 +160,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'digitalmediaupdates007@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
-
+RAZOR_KEY_ID = 'rzp_test_KUQnsWbCNAR1d5'
+RAZOR_KEY_SECRET = 'dRkVtesLD1jiz3cYngswxTw8'
