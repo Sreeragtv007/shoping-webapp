@@ -20,7 +20,7 @@ urlpatterns = [
     path('userprofile/',views.userProfile,name='userprofile'),
     path('download/<str:pk>/',views.downloadInvoice,name='download'),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
-    path('payment/', views.homepage, name='index1'),
+    path('payment/<int:pk>/', views.homepage, name='index1'),
 
    
 ]

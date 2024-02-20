@@ -90,9 +90,11 @@ class Buyproduct(models.Model):
                                    default="WAITING FOR SHIPPING")
     invoice_created = models.BooleanField(blank=True, null=True, default=False)
     file = models.FileField(upload_to='pdffile', blank=True, null=True)
+    payment_status=models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.totalprice = int(self.qty) * int(self.product.price)
+        
         super().save(*args, **kwargs)
 
     def __str__(self):

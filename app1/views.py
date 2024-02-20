@@ -186,7 +186,8 @@ def buyProduct(request, pk):
         pincode = request.POST.get('pincode')
         qty = request.POST.get('qty')
         productname = product.name
-
+      
+    
         buyproduct = Buyproduct.objects.create(
             user=request.user, product=product, qty=qty, address=address, pincode=pincode)
         messages.info(request, "you purchase request is sucessfully created")
@@ -199,8 +200,11 @@ def buyProduct(request, pk):
         #     fail_silently=False,
         # )
         # print('working')
+        # print(type(totalprice))
+        total=int(qty)*product.price*100
+        
 
-        return redirect('index')
+        return redirect('index1',pk=total)
 
     context = {'product': product}
 
@@ -308,9 +312,9 @@ razorpay_client = razorpay.Client(
 
 
 
-def homepage(request):
+def homepage(request,pk):
     currency = 'INR'
-    amount = 2000  # Rs. 200
+    amount = pk  # Rs. 200
  
     # Create a Razorpay Order
     razorpay_order = razorpay_client.order.create(dict(amount=amount,
@@ -346,6 +350,7 @@ def paymenthandler(request):
             payment_id = request.POST.get('razorpay_payment_id', '')
             razorpay_order_id = request.POST.get('razorpay_order_id', '')
             signature = request.POST.get('razorpay_signature', '')
+            amount=request.post.get('razorpay_amount','')
             params_dict = {
                 'razorpay_order_id': razorpay_order_id,
                 'razorpay_payment_id': payment_id,
@@ -356,7 +361,8 @@ def paymenthandler(request):
             result = razorpay_client.utility.verify_payment_signature(
                 params_dict)
             if result is not None:
-                amount = 20000  # Rs. 200
+                
+                amount = amount  # Rs. 200
                 try:
  
                     # capture the payemt
